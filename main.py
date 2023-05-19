@@ -1,5 +1,6 @@
 import pygame
 import os
+from Player1 import Player1
 
 WIDTH, HEIGHT = 1100, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -7,12 +8,17 @@ pygame.display.set_caption("Cowboy shooter")
 
 FPS = 60
 
+PLAYER_1_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_1.png'))
+
+P1 = Player1(50, WIDTH/2, 30, 60, PLAYER_1_IMAGE)
 
 DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert.png')), (WIDTH, HEIGHT))
 
+
+
 def draw_window():
     WIN.blit(DESERT, (0, 0))
-
+    P1.draw(WIN)
     pygame.display.update()
 
 def main():
@@ -20,7 +26,7 @@ def main():
     clock = pygame.time.Clock()
     while(run):
         clock.tick(FPS)
-        for event in pygame.event.get(): #checks if window is closed
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
