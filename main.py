@@ -10,7 +10,7 @@ FPS = 60
 
 PLAYER_1_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_1.png'))
 
-P1 = Player1(50, WIDTH/2, 30, 60, PLAYER_1_IMAGE)
+P1 = Player1(WIDTH/2 - 60, 670, PLAYER_1_IMAGE)
 
 DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert.png')), (WIDTH, HEIGHT))
 
