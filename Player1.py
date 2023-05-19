@@ -1,6 +1,7 @@
 import pygame
 import os
 
+WIDTH, HEIGHT = 1100, 800
 
 class Player1:
     def __init__(self, x, y, width, height, p1_image):
@@ -19,11 +20,11 @@ class Player1:
 
     def handle_movement(self):
         keys_pressed = pygame.key.get_pressed()
-        if keys_pressed [pygame.K_w] and self.x + self.VEL > 400 + self.height:
+        if keys_pressed [pygame.K_w] and self.y + self.VEL > HEIGHT/2:
             self.y -= self.VEL
-        if keys_pressed [pygame.K_a] and self.x + self.VEL + self.height > 0:
+        if keys_pressed [pygame.K_a] and self.x + self.VEL > -10:
             self.x -= self.VEL
-        if keys_pressed [pygame.K_s] and self.y - self.VEL < 800:
+        if keys_pressed [pygame.K_s] and self.y + self.VEL < 675:
             self.y += self.VEL
-        if keys_pressed [pygame.K_d] and self.y + self.VEL + self.width < 1100:
+        if keys_pressed [pygame.K_d] and self.x + self.VEL < 1030:
             self.x += self.VEL
