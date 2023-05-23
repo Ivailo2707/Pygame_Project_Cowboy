@@ -11,7 +11,6 @@ class Player1:
         self.__height = height
         self.__VEL = 6
         self.__p1_image = p1_image
-        self.__bullets = []
         self.__health = 10
 
     def draw(self, window):
