@@ -34,6 +34,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
+        P1.shoot()
         P1.handle_movement()
         P2.handle_movement()
         draw_window()
