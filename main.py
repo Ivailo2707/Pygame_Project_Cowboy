@@ -13,8 +13,9 @@ FPS = 60
 PLAYER_1_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_1.png'))
 PLAYER_2_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_2.png'))
 
-P1 = Player1(WIDTH/2 - 60, 600, 100, 160, PLAYER_1_IMAGE)
+P1 = Player1(WIDTH/2 - 60, 600, 100, 130, PLAYER_1_IMAGE)
 P2 = Player2(WIDTH/2 - 60, 100, 80, 100, PLAYER_2_IMAGE)
+BuCtrl = Bullet_Controller()
 
 DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert.png')), (WIDTH, HEIGHT))
 
@@ -22,15 +23,17 @@ def draw_window():
     WIN.blit(DESERT, (0, 0))
     P1.draw(WIN)
     P2.draw(WIN)
+    BuCtrl.draw_bullets(WIN)
+
     pygame.display.update()
 
 
 def main():
     run = True
     clock = pygame.time.Clock()
-    BuCtrl = Bullet_Controller()
     while(run):
         clock.tick(FPS)
+        BuCtrl.handle_bullets() 
         BuCtrl.shoot(run)
         P1.handle_movement()
         P2.handle_movement()
