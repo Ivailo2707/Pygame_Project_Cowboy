@@ -5,14 +5,16 @@ WIDTH, HEIGHT = 1100, 800
 
 class Player1:
     def __init__(self, x, y, width, height, p1_image):
+        self.rect = pygame.Rect(x, y, width, height)
         self.__x = x
         self.__y = y
         self.__width = width
         self.__height = height
-        self.__VEL = 6
+        self.__VEL = 5
         self.__p1_image = p1_image
         self.__health = 10
-        self.__bullets = []
+        self.bullets = []
+        self.__SILVER = (192, 192, 192)
 
     def draw(self, window):
         player_image = pygame.transform.scale(self.__p1_image, (self.__width, self.__height))
@@ -28,9 +30,5 @@ class Player1:
             self.__y += self.__VEL
         if keys_pressed [pygame.K_d] and self.__x + self.__VEL < 1030:
             self.__x += self.__VEL
-    def shoot(self):
-        keys_pressed = pygame.key.get_pressed()
-        if keys_pressed [pygame.K_LCTRL] and len(self.__bullets) < 3:
-            bullet = pygame.Rect(self.__x + self.__width, self.__y + self.__height/2 - 2, 10, 5 )
-            self.__bullets.append(bullet)
-        print(self.__bullets)
+
+

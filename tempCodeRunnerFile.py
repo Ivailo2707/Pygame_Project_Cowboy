@@ -1,2 +1,1 @@
-
-FPS = 60
+BuCtrl = Bullet_Controller()

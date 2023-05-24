@@ -5,12 +5,14 @@ WIDTH, HEIGHT = 1100, 800
 
 class Player2:
     def __init__(self, x, y, width, height, p2_image):
+        self.rect = pygame.Rect(x, y, width, height)
         self.__x = x
         self.__y = y
         self.__width = width
         self.__height = height
         self.__VEL = 6
         self.__p2_image = p2_image
+        self.bullets = []
         self.__health = 10
 
     def draw(self, window):
