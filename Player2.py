@@ -22,12 +22,6 @@ class Player2:
     def get_rect(self):
         return self._rect
     
-    def get_x(self):
-        return self._x
-    
-    def get_y(self):
-        return self._y
-    
     def get_width(self):
         return self._width
     
@@ -45,3 +39,10 @@ class Player2:
             self._y -= self._VEL
         if keys_pressed [pygame.K_DOWN] and self._y - self._VEL < HEIGHT/2 - self._height:
             self._y += self._VEL
+
+    def get_x(self):
+        return self._x
+    
+    def get_y(self):
+        return self._y
+        

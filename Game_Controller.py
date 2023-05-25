@@ -7,7 +7,7 @@ PLAYER_1_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_1.png'))
 PLAYER_2_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_2.png'))
 WIDTH, HEIGHT = 1100, 800
 
-class Bullet_Controller:
+class Game_Controller:
     def __init__(self):
         self._P1 = Player1(WIDTH/2 - 60, 600, 100, 160, PLAYER_1_IMAGE)
         self._P2 = Player2(WIDTH/2 - 60, 100, 80, 100, PLAYER_2_IMAGE)
@@ -18,22 +18,6 @@ class Bullet_Controller:
         self._BULLET_2_IMAGE = pygame.image.load(os.path.join('Assets', 'bullet.png'))
         self._P1_HIT = pygame.USEREVENT + 1
         self._P2_HIT = pygame.USEREVENT + 2
-
-    def shoot(self, run):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LCTRL and len(self._P1_bullets) < 3:
-                    bullet = pygame.Rect(self._P1.get_y() + self._P1.get_height(), self._P1.get_x() + self._P1.get_height()//2 - 2, 10, 5)
-                    self._P1_bullets.append(bullet)
-
-                if event.key == pygame.K_RCTRL and len(self._P2_bullets) < 3:
-                    bullet = pygame.Rect(WIDTH//2, 148, 10, 5)
-                    self._P2_bullets.append(bullet)
-    
 
     def handle_bullets(self):
         for bullet in self._P1_bullets:
@@ -61,3 +45,23 @@ class Bullet_Controller:
             bullet_rect = pygame.Rect(bullet[0], bullet[1], bullet_width, bullet_height)
             bullet_image_scaled = pygame.transform.scale(self._BULLET_2_IMAGE, (bullet_width, bullet_height))
             window.blit(bullet_image_scaled, bullet_rect)
+
+
+    def game(self):
+        self._P1.handle_movement()
+        self._P2.handle_movement()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LCTRL and len(self._P1_bullets) < 3:
+                    bullet = pygame.Rect(self._P1.get_x() + self._P1.get_width()//2, self._P1.get_y(), 10, 5)
+                    self._P1_bullets.append(bullet)
+
+                if event.key == pygame.K_RCTRL and len(self._P2_bullets) < 3:
+                    bullet = pygame.Rect(self._P2.get_x(), self._P2.get_y() + 50, 10, 5)
+                    self._P2_bullets.append(bullet)
+        self.handle_bullets()
