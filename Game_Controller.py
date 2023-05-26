@@ -3,9 +3,13 @@ import os
 from Player1 import Player1
 from Player2 import Player2
 
+pygame.font.init()
+
 PLAYER_1_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_1.png'))
 PLAYER_2_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_2.png'))
 WIDTH, HEIGHT = 1100, 800
+
+
 
 class Game_Controller:
     def __init__(self):
@@ -20,6 +24,8 @@ class Game_Controller:
         self._P2_HIT = pygame.USEREVENT + 2
         self._P1_UPDATED_HEALTH = 10
         self._P2_UPDATED_HEALTH = 10
+        self._winner_font = pygame.font.SysFont('comicsans', 100)
+        self._caput_m = (35, 15, 13) #yes, this is an actual color lol
 
     def handle_bullets(self):
         for bullet in self._P1_bullets:
@@ -54,7 +60,13 @@ class Game_Controller:
             window.blit(bullet_image_scaled, bullet_rect)
 
 
-    def game(self):
+    def draw_winner(self, text, window):
+        winner_text = self._winner_font.render(text, 1, self._caput_m)
+        window.blit(winner_text, (WIDTH/2 - winner_text.get_width()/2, HEIGHT/2 - winner_text.get_height()/2))
+        pygame.display.update()
+        pygame.time.delay(5000)
+    
+    def game(self, window):
         self._P1.handle_movement()
         self._P2.handle_movement()
         for event in pygame.event.get():
@@ -86,7 +98,8 @@ class Game_Controller:
             winner_text = "Player 2 wins!"
 
         if winner_text != "":
-            pass
+            self.draw_winner(winner_text, window)
+            pygame.quit()
 
         self.handle_bullets()
 
@@ -95,4 +108,4 @@ class Game_Controller:
 
     def get_2_curr_health(self):
         return self._P2_UPDATED_HEALTH
-       
+    

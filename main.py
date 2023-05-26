@@ -33,13 +33,12 @@ def draw_window():
 def main():
     run = True
     clock = pygame.time.Clock()
-    while(run):
+    while (run):
         clock.tick(60)
-        GaCtrl.game()
+        GaCtrl.game(WIN)
         P1.handle_movement()
         P2.handle_movement()
         draw_window()
-    main()
     
 
 if __name__ == "__main__":
