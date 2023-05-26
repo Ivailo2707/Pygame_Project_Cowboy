@@ -18,6 +18,8 @@ class Game_Controller:
         self._BULLET_2_IMAGE = pygame.image.load(os.path.join('Assets', 'bullet.png'))
         self._P1_HIT = pygame.USEREVENT + 1
         self._P2_HIT = pygame.USEREVENT + 2
+        self._P1_UPDATED_HEALTH = 10
+        self._P2_UPDATED_HEALTH = 10
 
     def handle_bullets(self):
         for bullet in self._P1_bullets:
@@ -71,10 +73,11 @@ class Game_Controller:
                     self._P2_bullets.append(bullet)
 
             if event.type == self._P2_HIT:
-                self._P2.take_normal_damage()
+                self._P2_UPDATED_HEALTH = self._P2.take_normal_damage()
 
             if event.type == self._P1_HIT:
-                self._P1.take_normal_damage()
+                self._P1_UPDATED_HEALTH = self._P1.take_normal_damage()
+            
 
         winner_text = ""
         if self._P2.get_health() <= 0:
@@ -86,3 +89,10 @@ class Game_Controller:
             pass
 
         self.handle_bullets()
+
+    def get_1_curr_health(self):
+        return self._P1_UPDATED_HEALTH
+
+    def get_2_curr_health(self):
+        return self._P2_UPDATED_HEALTH
+       

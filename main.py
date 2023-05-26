@@ -22,8 +22,8 @@ DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert
 
 def draw_window():
     WIN.blit(DESERT, (0, 0))
-    P1.draw_health(WIN)
-    P2.draw_health(WIN)
+    P1.draw_health(WIN, GaCtrl.get_1_curr_health())
+    P2.draw_health(WIN, GaCtrl.get_2_curr_health())
     P1.draw(WIN)
     P2.draw(WIN)
     GaCtrl.draw_bullets(WIN)

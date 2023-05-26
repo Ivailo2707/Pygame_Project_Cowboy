@@ -52,9 +52,10 @@ class Player1:
         self._health -= 1
         return self._health
 
+    
+    def draw_health(self, window, curr_health):
+        p1_health_text = self._health_font.render("Health: " + str(curr_health), 1, self._white)
+        window.blit(p1_health_text, (50, 700))
+
     def get_health(self):
         return self._health
-    
-    def draw_health(self, window):
-        p1_health_text = self._health_font.render("Health: " + str(self._health), 1, self._white)
-        window.blit(p1_health_text, (50, 700))
