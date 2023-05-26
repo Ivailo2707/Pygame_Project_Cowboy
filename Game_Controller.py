@@ -25,10 +25,15 @@ class Game_Controller:
             if self._P2.get_rect().colliderect(bullet):
                 pygame.event.post(pygame.event.Event(self._P2_HIT))
                 self._P1_bullets.remove(bullet)
+            elif bullet.y < 0:
+                self._P1_bullets.remove(bullet)
+
         for bullet in self._P2_bullets:
             bullet.y += self._BVEL
             if self._P1.get_rect().colliderect(bullet):
                 pygame.event.post(pygame.event.Event(self._P1_HIT))
+                self._P2_bullets.remove(bullet)
+            elif bullet.y > HEIGHT:
                 self._P2_bullets.remove(bullet)
 
 
@@ -64,4 +69,20 @@ class Game_Controller:
                 if event.key == pygame.K_RCTRL and len(self._P2_bullets) < 3:
                     bullet = pygame.Rect(self._P2.get_x(), self._P2.get_y() + 50, 10, 5)
                     self._P2_bullets.append(bullet)
+
+            if event.type == self._P2_HIT:
+                self._P2.take_normal_damage()
+
+            if event.type == self._P1_HIT:
+                self._P1.take_normal_damage()
+
+        winner_text = ""
+        if self._P2.get_health() <= 0:
+            winner_text = "Player 1 wins!"
+        if self._P1.get_health() <= 0:
+            winner_text = "Player 2 wins!"
+
+        if winner_text != "":
+            pass
+
         self.handle_bullets()

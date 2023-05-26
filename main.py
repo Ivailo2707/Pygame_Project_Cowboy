@@ -4,12 +4,15 @@ from Player1 import Player1
 from Player2 import Player2
 from Game_Controller import Game_Controller
 
+pygame.font.init()
+
 WIDTH, HEIGHT = 1100, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Cowboy shooter")
 
 PLAYER_1_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_1.png'))
 PLAYER_2_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_2.png'))
+
 
 P1 = Player1(WIDTH/2 - 60, 600, 100, 130, PLAYER_1_IMAGE)
 P2 = Player2(WIDTH/2 - 60, 100, 80, 100, PLAYER_2_IMAGE)
@@ -19,6 +22,8 @@ DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert
 
 def draw_window():
     WIN.blit(DESERT, (0, 0))
+    P1.draw_health(WIN)
+    P2.draw_health(WIN)
     P1.draw(WIN)
     P2.draw(WIN)
     GaCtrl.draw_bullets(WIN)

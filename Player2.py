@@ -1,26 +1,25 @@
 import pygame
 
+pygame.font.init()
 
 WIDTH, HEIGHT = 1100, 800
 
 class Player2:
     def __init__(self, x, y, width, height, p2_image):
-        self._rect = pygame.Rect(x, y, width, height)
         self._x = x
         self._y = y
         self._width = width
         self._height = height
         self._VEL = 6
         self._p2_image = p2_image
-        self.bullets = []
         self._health = 10
+        self._health_font = pygame.font.SysFont('comicsans', 40)
+        self._white = (250, 250, 250)
 
     def draw(self, window):
         player_image = pygame.transform.scale(self._p2_image, (self._width, self._height))
         window.blit(player_image ,(self._x, self._y, self._width, self._height))
 
-    def get_rect(self):
-        return self._rect
     
     def get_width(self):
         return self._width
@@ -45,4 +44,16 @@ class Player2:
     
     def get_y(self):
         return self._y
-        
+    
+    def get_rect(self):
+        return pygame.Rect(self._x, self._y, self._width, self._height)
+    
+    def take_normal_damage(self):
+        self._health -= 1
+    
+    def get_health(self):
+        return self._health
+    
+    def draw_health(self, window):
+        p1_health_text = self._health_font.render("Health: " + str(self._health), 1, self._white)
+        window.blit(p1_health_text, (50, 50))
