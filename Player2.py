@@ -36,7 +36,7 @@ class Player2:
             self._x += self._VEL
         if keys_pressed [pygame.K_UP] and self._y - self._VEL > 0:
             self._y -= self._VEL
-        if keys_pressed [pygame.K_DOWN] and self._y - self._VEL < HEIGHT/2 - self._height:
+        if keys_pressed [pygame.K_DOWN] and self._y - self._VEL < HEIGHT/2 - self._height - 10:
             self._y += self._VEL
 
     def get_x(self):

@@ -22,13 +22,23 @@ class Game_Controller:
         self._BULLET_1_IMAGE = pygame.transform.rotate(pygame.image.load(os.path.join('Assets', 'bullet.png')), 180)
         self._BULLET_2_IMAGE = pygame.image.load(os.path.join('Assets', 'bullet.png'))
         self._P1_HIT = pygame.USEREVENT + 1
-        self._P1_CACTUS = pygame.USEREVENT + 2
-        self._P2_HIT = pygame.USEREVENT + 3
+        self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_1 = pygame.USEREVENT + 2
+        self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_2 = pygame.USEREVENT + 3
+        self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_3 = pygame.USEREVENT + 4
+        self._CACTUS_SIDE_1_NUM_1_HIT = pygame.USEREVENT + 5
+        self._CACTUS_SIDE_1_NUM_2_HIT = pygame.USEREVENT + 6
+        self._CACTUS_SIDE_1_NUM_3_HIT = pygame.USEREVENT + 7
+        self._P2_HIT = pygame.USEREVENT + 8
         self._P1_UPDATED_HEALTH = 10
         self._P2_UPDATED_HEALTH = 10
+        self._CACTUS_1_1_UPDATED_HEALTH = 5
+        self._CACTUS_1_2_UPDATED_HEALTH = 5
+        self._CACTUS_1_3_UPDATED_HEALTH = 5
         self._winner_font = pygame.font.SysFont('comicsans', 100)
         self._caput_m = (35, 15, 13) #yes, this is an actual color lol
-        self._cover_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 300, 65, 50, PLAYER_1_IMAGE)
+        self._cover_1_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 300, 65, 50, PLAYER_1_IMAGE)
+        self._cover_1_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 350, 65, 50, PLAYER_1_IMAGE)
+        self._cover_1_3 = Cactus_Cover(WIDTH - 600, HEIGHT - 350, 65, 50, PLAYER_1_IMAGE)
 
     def handle_bullets(self):
         for bullet in self._P1_bullets:
@@ -36,6 +46,27 @@ class Game_Controller:
             if self._P2.get_rect().colliderect(bullet):
                 pygame.event.post(pygame.event.Event(self._P2_HIT))
                 self._P1_bullets.remove(bullet)
+            elif self._cover_1_1.get_obstacle_rect().colliderect(bullet):
+                if self._cover_1_1.get_status():
+                    pygame.event.post(pygame.event.Event(self._CACTUS_SIDE_1_NUM_1_HIT))
+                    self._P1_bullets.remove(bullet)
+                else:
+                    pass
+            
+            elif self._cover_1_2.get_obstacle_rect().colliderect(bullet):
+                if self._cover_1_2.get_status():
+                    pygame.event.post(pygame.event.Event(self._CACTUS_SIDE_1_NUM_2_HIT))
+                    self._P1_bullets.remove(bullet)
+                else:
+                    pass
+                
+            elif self._cover_1_3.get_obstacle_rect().colliderect(bullet):
+                if self._cover_1_3.get_status():
+                    pygame.event.post(pygame.event.Event(self._CACTUS_SIDE_1_NUM_3_HIT))
+                    self._P1_bullets.remove(bullet)
+                else:
+                    pass
+
             elif bullet.y < 0:
                 self._P1_bullets.remove(bullet)
 
@@ -44,12 +75,39 @@ class Game_Controller:
             if self._P1.get_rect().colliderect(bullet):
                 pygame.event.post(pygame.event.Event(self._P1_HIT))
                 self._P2_bullets.remove(bullet)
+            elif self._cover_1_1.get_obstacle_rect().colliderect(bullet):
+                if self._cover_1_1.get_status():
+                    pygame.event.post(pygame.event.Event(self._CACTUS_SIDE_1_NUM_1_HIT))
+                    self._P2_bullets.remove(bullet)
+                else:
+                    pass
+
+            elif self._cover_1_2.get_obstacle_rect().colliderect(bullet):
+                if self._cover_1_2.get_status():
+                    pygame.event.post(pygame.event.Event(self._CACTUS_SIDE_1_NUM_1_HIT))
+                    self._P2_bullets.remove(bullet)
+                else:
+                    pass
+                
+            elif self._cover_1_3.get_obstacle_rect().colliderect(bullet):
+                if self._cover_1_3.get_status():
+                    pygame.event.post(pygame.event.Event(self._CACTUS_SIDE_1_NUM_1_HIT))
+                    self._P2_bullets.remove(bullet)
+                else:
+                    pass
+        
             elif bullet.y > HEIGHT:
                 self._P2_bullets.remove(bullet)
 
     def handle_cactus_colissions(self):
-        if self._P1.get_rect().colliderect(self._cover_1.get_obstacle_rect()):
-            pygame.event.post(pygame.event.Event(self._P1_CACTUS))
+        if self._P1.get_rect().colliderect(self._cover_1_1.get_obstacle_rect()):
+            pygame.event.post(pygame.event.Event(self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_1))
+
+        elif self._P1.get_rect().colliderect(self._cover_1_2.get_obstacle_rect()):
+            pygame.event.post(pygame.event.Event(self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_1))
+
+        elif self._P1.get_rect().colliderect(self._cover_1_3.get_obstacle_rect()):
+            pygame.event.post(pygame.event.Event(self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_1))
 
     def draw_bullets(self, window):
         bullet_width = 15
@@ -75,6 +133,15 @@ class Game_Controller:
     def game(self, window):
         self._P1.handle_movement()
         self._P2.handle_movement()
+        if self._CACTUS_1_1_UPDATED_HEALTH <= 0:
+            self._cover_1_1.remove()
+
+        if self._CACTUS_1_2_UPDATED_HEALTH <= 0:
+            self._cover_1_2.remove()
+
+        if self._CACTUS_1_3_UPDATED_HEALTH <= 0:
+            self._cover_1_3.remove()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -92,13 +159,37 @@ class Game_Controller:
 
             if event.type == self._P2_HIT:
                 self._P2_UPDATED_HEALTH = self._P2.take_normal_damage()
+            
+            if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_1:
+                if self._cover_1_1.get_status() == True:
+                    self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
+                else:
+                    self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
 
-            if event.type == self._P1_CACTUS:
-                self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
-                
+            if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_2:
+                if self._cover_1_2.get_status() == True:
+                    self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
+                else:
+                    self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
+
+            if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_3:
+                if self._cover_1_3.get_status() == True:
+                    self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
+                else:
+                    self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
+
+
             if event.type == self._P1_HIT:
                 self._P1_UPDATED_HEALTH = self._P1.take_normal_damage()
             
+            if event.type == self._CACTUS_SIDE_1_NUM_1_HIT:
+                self._CACTUS_1_1_UPDATED_HEALTH = self._cover_1_1.take_bullet_damage()
+
+            if event.type == self._CACTUS_SIDE_1_NUM_2_HIT:
+                self._CACTUS_1_2_UPDATED_HEALTH = self._cover_1_1.take_bullet_damage()
+
+            if event.type == self._CACTUS_SIDE_1_NUM_3_HIT:
+                self._CACTUS_1_3_UPDATED_HEALTH = self._cover_1_1.take_bullet_damage()
 
         winner_text = ""
         if self._P2.get_health() <= 0:
@@ -109,9 +200,11 @@ class Game_Controller:
         if winner_text != "":
             self.draw_winner(winner_text, window)
             pygame.quit()
-
+        
         self.handle_cactus_colissions()
         self.handle_bullets()
+
+        print(self._cover_1_1.get_status(), '|', self._cover_1_2.get_status(), '|', self._cover_1_3.get_status())
 
     def get_1_curr_health(self):
         return self._P1_UPDATED_HEALTH

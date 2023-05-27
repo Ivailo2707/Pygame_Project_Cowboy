@@ -30,7 +30,7 @@ class Player1:
 
     def handle_movement(self):
         keys_pressed = pygame.key.get_pressed()
-        if keys_pressed [pygame.K_w] and self._y + self._VEL > HEIGHT/2:
+        if keys_pressed [pygame.K_w] and self._y + self._VEL > HEIGHT/2 - 30:
             self._y -= self._VEL
         if keys_pressed [pygame.K_a] and self._x + self._VEL > -10:
             self._x -= self._VEL
