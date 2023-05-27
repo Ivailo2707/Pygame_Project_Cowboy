@@ -2,6 +2,7 @@ import pygame
 import os
 from Player1 import Player1
 from Player2 import Player2
+from Cactus_cover import Cactus_Cover
 
 pygame.font.init()
 
@@ -21,11 +22,13 @@ class Game_Controller:
         self._BULLET_1_IMAGE = pygame.transform.rotate(pygame.image.load(os.path.join('Assets', 'bullet.png')), 180)
         self._BULLET_2_IMAGE = pygame.image.load(os.path.join('Assets', 'bullet.png'))
         self._P1_HIT = pygame.USEREVENT + 1
-        self._P2_HIT = pygame.USEREVENT + 2
+        self._P1_CACTUS = pygame.USEREVENT + 2
+        self._P2_HIT = pygame.USEREVENT + 3
         self._P1_UPDATED_HEALTH = 10
         self._P2_UPDATED_HEALTH = 10
         self._winner_font = pygame.font.SysFont('comicsans', 100)
         self._caput_m = (35, 15, 13) #yes, this is an actual color lol
+        self._cover_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 300, 65, 50, PLAYER_1_IMAGE)
 
     def handle_bullets(self):
         for bullet in self._P1_bullets:
@@ -44,6 +47,9 @@ class Game_Controller:
             elif bullet.y > HEIGHT:
                 self._P2_bullets.remove(bullet)
 
+    def handle_cactus_colissions(self):
+        if self._P1.get_rect().colliderect(self._cover_1.get_obstacle_rect()):
+            pygame.event.post(pygame.event.Event(self._P1_CACTUS))
 
     def draw_bullets(self, window):
         bullet_width = 15
@@ -87,6 +93,9 @@ class Game_Controller:
             if event.type == self._P2_HIT:
                 self._P2_UPDATED_HEALTH = self._P2.take_normal_damage()
 
+            if event.type == self._P1_CACTUS:
+                self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
+                
             if event.type == self._P1_HIT:
                 self._P1_UPDATED_HEALTH = self._P1.take_normal_damage()
             
@@ -101,6 +110,7 @@ class Game_Controller:
             self.draw_winner(winner_text, window)
             pygame.quit()
 
+        self.handle_cactus_colissions()
         self.handle_bullets()
 
     def get_1_curr_health(self):

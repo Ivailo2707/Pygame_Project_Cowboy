@@ -3,6 +3,8 @@ import os
 from Player1 import Player1
 from Player2 import Player2
 from Game_Controller import Game_Controller
+from Cactus_cover import Cactus_Cover
+
 
 pygame.font.init()
 
@@ -12,11 +14,12 @@ pygame.display.set_caption("Cowboy shooter")
 
 PLAYER_1_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_1.png'))
 PLAYER_2_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_2.png'))
-
+CACTUS_IMAGE = pygame.image.load(os.path.join('Assets', 'cactus.png'))
 
 P1 = Player1(WIDTH/2 - 60, 600, 100, 130, PLAYER_1_IMAGE)
 P2 = Player2(WIDTH/2 - 60, 100, 80, 100, PLAYER_2_IMAGE)
 GaCtrl = Game_Controller()
+SIDE_1_COVER_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 300, 120, 60, CACTUS_IMAGE)
 
 DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert.png')), (WIDTH, HEIGHT))
 
@@ -26,6 +29,7 @@ def draw_window():
     P2.draw_health(WIN, GaCtrl.get_2_curr_health())
     P1.draw(WIN)
     P2.draw(WIN)
+    SIDE_1_COVER_1.draw(WIN)
     GaCtrl.draw_bullets(WIN)
     pygame.display.update()
 
