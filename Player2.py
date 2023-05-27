@@ -52,9 +52,16 @@ class Player2:
         self._health -= 1
         return self._health
     
+    def take_colission_with_cactus_damage(self):
+        self._health -= 0.01
+        return self._health
+
+
     def draw_health(self, window, curr_health):
-        p1_health_text = self._health_font.render("Health: " + str(curr_health), 1, self._white)
+        p2_health_tounded = round(curr_health, 2)
+        p1_health_text = self._health_font.render("Health: " + str(p2_health_tounded), 1, self._white)
         window.blit(p1_health_text, (50, 50))
+
 
     def get_health(self):
         return self._health

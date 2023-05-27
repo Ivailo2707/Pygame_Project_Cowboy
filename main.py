@@ -22,6 +22,9 @@ GaCtrl = Game_Controller()
 SIDE_1_COVER_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 350, 120, 60, CACTUS_IMAGE)
 SIDE_1_COVER_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 350, 120, 60, CACTUS_IMAGE)
 SIDE_1_COVER_3 = Cactus_Cover(WIDTH - 200, HEIGHT - 400, 120, 60, CACTUS_IMAGE)
+SIDE_2_COVER_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 550, 120, 60, CACTUS_IMAGE)
+SIDE_2_COVER_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 600, 120, 60, CACTUS_IMAGE)
+SIDE_2_COVER_3 = Cactus_Cover(WIDTH - 200, HEIGHT - 650, 120, 60, CACTUS_IMAGE)
 
 DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert.png')), (WIDTH, HEIGHT))
 
@@ -50,6 +53,26 @@ def draw_window():
         background_rect = pygame.Rect(WIDTH - 900, HEIGHT - 300, 120, 60)
         WIN.blit(DESERT, (WIDTH - 900, HEIGHT - 300), background_rect)
 
+    if SIDE_2_COVER_1.get_status():
+        SIDE_2_COVER_1.draw(WIN)
+
+    elif not SIDE_2_COVER_1.get_status():
+        background_rect = pygame.Rect(WIDTH - 900, HEIGHT - 300, 120, 60)
+        WIN.blit(DESERT, (WIDTH - 900, HEIGHT - 300), background_rect)
+
+    if SIDE_2_COVER_2.get_status():
+        SIDE_2_COVER_2.draw(WIN)
+
+    elif not SIDE_2_COVER_2.get_status():
+        background_rect = pygame.Rect(WIDTH - 900, HEIGHT - 300, 120, 60)
+        WIN.blit(DESERT, (WIDTH - 900, HEIGHT - 300), background_rect)
+
+    if SIDE_2_COVER_3.get_status():
+        SIDE_2_COVER_3.draw(WIN)
+
+    elif not SIDE_2_COVER_3.get_status():
+        background_rect = pygame.Rect(WIDTH - 900, HEIGHT - 300, 120, 60)
+        WIN.blit(DESERT, (WIDTH - 900, HEIGHT - 300), background_rect)
 
     P1.draw(WIN)
     P2.draw(WIN)
