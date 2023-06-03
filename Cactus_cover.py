@@ -11,8 +11,9 @@ class Cactus_Cover:
         self._exists = True
 
     def draw(self, window):
-        obstacle_image = pygame.transform.scale(self._cactus_image, (self._width, self._height))
-        window.blit(obstacle_image ,(self._x, self._y, self._width, self._height))
+        if(self._exists):
+            obstacle_image = pygame.transform.scale(self._cactus_image, (self._width, self._height))
+            window.blit(obstacle_image ,(self._x, self._y, self._width, self._height))
 
     def remove(self):
         self._exists = False
@@ -41,7 +42,8 @@ class Cactus_Cover:
         return self._health
     
     def get_status(self):
-        if self._exists == True:
-            return True
-        else:
-            return False
+        return self._exists
+    
+    def remove_drawing(window, background, height, width):
+        background_rect = pygame.Rect(width - 900, height - 300, 120, 60)
+        window.blit(background, (width - 900, height - 300), background_rect)

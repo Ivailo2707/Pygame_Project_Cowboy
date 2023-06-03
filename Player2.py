@@ -10,7 +10,7 @@ class Player2:
         self._y = y
         self._width = width
         self._height = height
-        self._VEL = 6
+        self._VEL = 4
         self._p2_image = p2_image
         self._health = 10
         self._health_font = pygame.font.SysFont('comicsans', 40)

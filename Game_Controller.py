@@ -9,8 +9,10 @@ pygame.font.init()
 PLAYER_1_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_1.png'))
 PLAYER_2_IMAGE = pygame.image.load(os.path.join('Assets', 'Player_2.png'))
 WIDTH, HEIGHT = 1100, 800
-
-
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Cowboy shooter")
+CACTUS_IMAGE = pygame.image.load(os.path.join('Assets', 'cactus.png'))
+DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert.png')), (WIDTH, HEIGHT))
 
 class Game_Controller:
     def __init__(self):
@@ -45,12 +47,12 @@ class Game_Controller:
         self._CACTUS_2_3_UPDATED_HEALTH = 5
         self._winner_font = pygame.font.SysFont('comicsans', 100)
         self._caput_m = (35, 15, 13) #yes, this is an actual color lol
-        self._cover_1_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 300, 65, 50, PLAYER_1_IMAGE)
-        self._cover_1_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 350, 65, 50, PLAYER_1_IMAGE)
-        self._cover_1_3 = Cactus_Cover(WIDTH - 200, HEIGHT - 400, 65, 50, PLAYER_1_IMAGE)
-        self._cover_2_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 550, 65, 50, PLAYER_1_IMAGE)
-        self._cover_2_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 600, 65, 50, PLAYER_1_IMAGE)
-        self._cover_2_3 = Cactus_Cover(WIDTH - 200, HEIGHT - 650, 65, 50, PLAYER_1_IMAGE)
+        self._cover_1_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 300, 120, 60, CACTUS_IMAGE)
+        self._cover_1_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 350, 120, 60, CACTUS_IMAGE)
+        self._cover_1_3 = Cactus_Cover(WIDTH - 200, HEIGHT - 400, 120, 60, CACTUS_IMAGE)
+        self._cover_2_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 550, 120, 60, CACTUS_IMAGE)
+        self._cover_2_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 600, 120, 60, CACTUS_IMAGE)
+        self._cover_2_3 = Cactus_Cover(WIDTH - 200, HEIGHT - 650, 120, 60, CACTUS_IMAGE)
 
     def handle_bullets(self):
         for bullet in self._P1_bullets:
@@ -194,116 +196,166 @@ class Game_Controller:
         pygame.display.update()
         pygame.time.delay(5000)
     
-    def game(self, window):
-        self._P1.handle_movement()
-        self._P2.handle_movement()
-        if self._CACTUS_1_1_UPDATED_HEALTH <= 0:
-            self._cover_1_1.remove()
+    def draw_window(self):
+        WIN.blit(DESERT, (0, 0))
+        self._P1.draw_health(WIN, self._P1_UPDATED_HEALTH)
+        self._P2.draw_health(WIN, self._P2_UPDATED_HEALTH)
+        if self._cover_1_1.get_status():
+            self._cover_1_1.draw(WIN)
 
-        if self._CACTUS_1_2_UPDATED_HEALTH <= 0:
-            self._cover_1_2.remove()
+        if self._cover_1_2.get_status():
+            self._cover_1_2.draw(WIN)
 
-        if self._CACTUS_1_3_UPDATED_HEALTH <= 0:
-            self._cover_1_3.remove()
+        if self._cover_1_3.get_status():
+            self._cover_1_3.draw(WIN)
 
-        if self._CACTUS_2_1_UPDATED_HEALTH <= 0:
-            self._cover_2_1.remove()
+        elif not self._cover_1_3.get_status():
+            background_rect = pygame.Rect(WIDTH - 200, HEIGHT - 400, 120, 60)
+            WIN.blit(DESERT, (WIDTH - 200, HEIGHT - 400), background_rect)
 
-        if self._CACTUS_2_2_UPDATED_HEALTH <= 0:
-            self._cover_2_2.remove()
+        if self._cover_2_1.get_status():
+            self._cover_2_1.draw(WIN)
 
-        if self._CACTUS_2_3_UPDATED_HEALTH <= 0:
-            self._cover_2_3.remove()
+        elif not self._cover_2_1.get_status():
+            background_rect = pygame.Rect(WIDTH - 900, HEIGHT - 550, 120, 60)
+            WIN.blit(DESERT, (WIDTH - 900, HEIGHT - 550), background_rect)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+        if self._cover_2_2.get_status():
+            self._cover_2_2.draw(WIN)
+
+        elif not self._cover_2_2.get_status():
+            background_rect = pygame.Rect(WIDTH - 600, HEIGHT - 600, 120, 60)
+            WIN.blit(DESERT, (WIDTH - 600, HEIGHT - 600), background_rect)
+
+        if self._cover_2_3.get_status():
+            self._cover_2_3.draw(WIN)
+
+        elif not self._cover_2_3.get_status():
+            background_rect = pygame.Rect(WIDTH - 200, HEIGHT - 650, 120, 60)
+            WIN.blit(DESERT, (WIDTH - 200, HEIGHT - 650), background_rect)
+
+        self._P1.draw(WIN)
+        self._P2.draw(WIN)
+        self.draw_bullets(WIN)
+        pygame.display.update()
+
+
+    def game(self):
+        run = True
+        clock = pygame.time.Clock()
+        while(run):
+            clock.tick(60)
+            self._P1.handle_movement()
+            self._P2.handle_movement()
+            if self._CACTUS_1_1_UPDATED_HEALTH <= 0:
+                self._cover_1_1.remove()
+
+            if self._CACTUS_1_2_UPDATED_HEALTH <= 0:
+                self._cover_1_2.remove()
+
+            if self._CACTUS_1_3_UPDATED_HEALTH <= 0:
+                self._cover_1_3.remove()
+
+            if self._CACTUS_2_1_UPDATED_HEALTH <= 0:
+                self._cover_2_1.remove()
+
+            if self._CACTUS_2_2_UPDATED_HEALTH <= 0:
+                self._cover_2_2.remove()
+
+            if self._CACTUS_2_3_UPDATED_HEALTH <= 0:
+                self._cover_2_3.remove()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+                    pygame.quit()
+
+
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LCTRL and len(self._P1_bullets) < 3:
+                        bullet = pygame.Rect(self._P1.get_x() + self._P1.get_width()//2, self._P1.get_y(), 10, 5)
+                        self._P1_bullets.append(bullet)
+
+                    if event.key == pygame.K_RCTRL and len(self._P2_bullets) < 3:
+                        bullet = pygame.Rect(self._P2.get_x(), self._P2.get_y() + 50, 10, 5)
+                        self._P2_bullets.append(bullet)
+
+                if event.type == self._P2_HIT:
+                    self._P2_UPDATED_HEALTH = self._P2.take_normal_damage()
+            
+                if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_1:
+                    if self._cover_1_1.get_status() == True:
+                        self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
+                    else:
+                        self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
+
+                if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_2:
+                    if self._cover_1_2.get_status() == True:
+                        self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
+                    else:
+                        self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
+
+                if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_3:
+                    if self._cover_1_3.get_status() == True:
+                        self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
+                    else:
+                        self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
+
+                if event.type == self._P2_COLLIDE_WITH_CACTUS_SIDE_2_NUMBER_1:
+                    if self._cover_2_1.get_status() == True:
+                        self._P2_UPDATED_HEALTH = self._P2.take_colission_with_cactus_damage()
+                    else:
+                        self._P2_UPDATED_HEALTH = self._P2_UPDATED_HEALTH
+
+                if event.type == self._P2_COLLIDE_WITH_CACTUS_SIDE_2_NUMBER_2:
+                    if self._cover_2_2.get_status() == True:
+                        self._P2_UPDATED_HEALTH = self._P2.take_colission_with_cactus_damage()
+                    else:
+                        self._P2_UPDATED_HEALTH = self._P2_UPDATED_HEALTH
+
+                if event.type == self._P2_COLLIDE_WITH_CACTUS_SIDE_2_NUMBER_3:
+                    if self._cover_2_3.get_status() == True:
+                        self._P2_UPDATED_HEALTH = self._P2.take_colission_with_cactus_damage()
+                    else:
+                        self._P2_UPDATED_HEALTH = self._P2_UPDATED_HEALTH
+
+
+                if event.type == self._P1_HIT:
+                    self._P1_UPDATED_HEALTH = self._P1.take_normal_damage()
+            
+                if event.type == self._CACTUS_SIDE_1_NUM_1_HIT:
+                    self._CACTUS_1_1_UPDATED_HEALTH = self._cover_1_1.take_bullet_damage()
+
+                if event.type == self._CACTUS_SIDE_1_NUM_2_HIT:
+                    self._CACTUS_1_2_UPDATED_HEALTH = self._cover_1_2.take_bullet_damage()
+
+                if event.type == self._CACTUS_SIDE_1_NUM_3_HIT:
+                    self._CACTUS_1_3_UPDATED_HEALTH = self._cover_1_3.take_bullet_damage()
+
+                if event.type == self._CACTUS_SIDE_2_NUM_1_HIT:
+                    self._CACTUS_2_1_UPDATED_HEALTH = self._cover_2_1.take_bullet_damage()
+
+                if event.type == self._CACTUS_SIDE_2_NUM_2_HIT:
+                    self._CACTUS_2_2_UPDATED_HEALTH = self._cover_2_2.take_bullet_damage()
+
+                if event.type == self._CACTUS_SIDE_2_NUM_3_HIT:
+                    self._CACTUS_2_3_UPDATED_HEALTH = self._cover_2_3.take_bullet_damage()
+
+            winner_text = ""
+            if self._P2.get_health() <= 0:
+                winner_text = "Player 1 wins!"
+            if self._P1.get_health() <= 0:
+                winner_text = "Player 2 wins!"
+
+            if winner_text != "":
+                self.draw_winner(winner_text, WIN)
                 pygame.quit()
-
-
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LCTRL and len(self._P1_bullets) < 3:
-                    bullet = pygame.Rect(self._P1.get_x() + self._P1.get_width()//2, self._P1.get_y(), 10, 5)
-                    self._P1_bullets.append(bullet)
-
-                if event.key == pygame.K_RCTRL and len(self._P2_bullets) < 3:
-                    bullet = pygame.Rect(self._P2.get_x(), self._P2.get_y() + 50, 10, 5)
-                    self._P2_bullets.append(bullet)
-
-            if event.type == self._P2_HIT:
-                self._P2_UPDATED_HEALTH = self._P2.take_normal_damage()
-            
-            if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_1:
-                if self._cover_1_1.get_status() == True:
-                    self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
-                else:
-                    self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
-
-            if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_2:
-                if self._cover_1_2.get_status() == True:
-                    self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
-                else:
-                    self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
-
-            if event.type == self._P1_COLLIDE_WITH_CACTUS_SIDE_1_NUMBER_3:
-                if self._cover_1_3.get_status() == True:
-                    self._P1_UPDATED_HEALTH = self._P1.take_colission_with_cactus_damage()
-                else:
-                    self._P1_UPDATED_HEALTH = self._P1_UPDATED_HEALTH
-
-            if event.type == self._P2_COLLIDE_WITH_CACTUS_SIDE_2_NUMBER_1:
-                if self._cover_2_1.get_status() == True:
-                    self._P2_UPDATED_HEALTH = self._P2.take_colission_with_cactus_damage()
-                else:
-                    self._P2_UPDATED_HEALTH = self._P2_UPDATED_HEALTH
-
-            if event.type == self._P2_COLLIDE_WITH_CACTUS_SIDE_2_NUMBER_2:
-                if self._cover_2_2.get_status() == True:
-                    self._P2_UPDATED_HEALTH = self._P2.take_colission_with_cactus_damage()
-                else:
-                    self._P2_UPDATED_HEALTH = self._P2_UPDATED_HEALTH
-
-            if event.type == self._P2_COLLIDE_WITH_CACTUS_SIDE_2_NUMBER_3:
-                if self._cover_2_3.get_status() == True:
-                    self._P2_UPDATED_HEALTH = self._P2.take_colission_with_cactus_damage()
-                else:
-                    self._P2_UPDATED_HEALTH = self._P2_UPDATED_HEALTH
-
-
-            if event.type == self._P1_HIT:
-                self._P1_UPDATED_HEALTH = self._P1.take_normal_damage()
-            
-            if event.type == self._CACTUS_SIDE_1_NUM_1_HIT:
-                self._CACTUS_1_1_UPDATED_HEALTH = self._cover_1_1.take_bullet_damage()
-
-            if event.type == self._CACTUS_SIDE_1_NUM_2_HIT:
-                self._CACTUS_1_2_UPDATED_HEALTH = self._cover_1_2.take_bullet_damage()
-
-            if event.type == self._CACTUS_SIDE_1_NUM_3_HIT:
-                self._CACTUS_1_3_UPDATED_HEALTH = self._cover_1_3.take_bullet_damage()
-
-            if event.type == self._CACTUS_SIDE_2_NUM_1_HIT:
-                self._CACTUS_2_1_UPDATED_HEALTH = self._cover_2_1.take_bullet_damage()
-
-            if event.type == self._CACTUS_SIDE_2_NUM_2_HIT:
-                self._CACTUS_2_2_UPDATED_HEALTH = self._cover_2_2.take_bullet_damage()
-
-            if event.type == self._CACTUS_SIDE_2_NUM_3_HIT:
-                self._CACTUS_2_3_UPDATED_HEALTH = self._cover_2_3.take_bullet_damage()
-
-        winner_text = ""
-        if self._P2.get_health() <= 0:
-            winner_text = "Player 1 wins!"
-        if self._P1.get_health() <= 0:
-            winner_text = "Player 2 wins!"
-
-        if winner_text != "":
-            self.draw_winner(winner_text, window)
-            pygame.quit()
         
-        self.handle_cactus_colissions()
-        self.handle_bullets()
-
+            self.handle_cactus_colissions()
+            self.handle_bullets()
+            self._P1.handle_movement()
+            self._P2.handle_movement()
+            self.draw_window() 
 
     def get_1_curr_health(self):
         return self._P1_UPDATED_HEALTH
