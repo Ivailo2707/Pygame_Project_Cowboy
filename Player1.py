@@ -4,6 +4,7 @@ import os
 WIDTH, HEIGHT = 1100, 800
 
 pygame.font.init()
+pygame.mixer.init()
 
 class Player1:
     def __init__(self, x, y, width, height, p1_image):
@@ -16,6 +17,8 @@ class Player1:
         self._health = 10
         self._health_font = pygame.font.SysFont('comicsans', 40)
         self._white = (250, 250, 250)
+        self._bullets = []
+        self._BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'Gunshot.mp3'))
 
     def draw(self, window):
         player_image = pygame.transform.scale(self._p1_image, (self._width, self._height))
@@ -62,5 +65,16 @@ class Player1:
         p1_health_text = self._health_font.render("Health: " + str(p1_health_tounded), 1, self._white)
         window.blit(p1_health_text, (50, 700))
 
+    def shoot(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LCTRL and len(self._bullets) < 3:
+                bullet = pygame.Rect(self._x + self._width//2, self._y, 10, 5)
+                self._bullets.append(bullet)
+                self._BULLET_FIRE_SOUND.play()
+
+
     def get_health(self):
         return self._health
+    
+    def get_bullets(self):
+        return self._bullets
