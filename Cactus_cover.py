@@ -32,18 +32,15 @@ class Cactus_Cover:
         return self._width
     
     def get_obstacle_rect(self):
-        return pygame.Rect(self._x, self._y, self._width, self._height)
+        return pygame.Rect(self._x, self._y, 65, 50)
     
     def take_bullet_damage(self):
         self._health -= 1
         return self._health
     
-    def get_health(self):
-        return self._health
-    
     def get_status(self):
         return self._exists
-    
-    def remove_drawing(window, background, height, width):
-        background_rect = pygame.Rect(width - 900, height - 300, 120, 60)
-        window.blit(background, (width - 900, height - 300), background_rect)
+
+
+    def get_health(self):
+        return self._health
