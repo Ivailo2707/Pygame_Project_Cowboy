@@ -19,18 +19,17 @@ class Game_Controller:
     def __init__(self):
         self._P1 = Player1(WIDTH/2 - 60, 600, 100, 160, PLAYER_1_IMAGE)
         self._P2 = Player2(WIDTH/2 - 60, 100, 80, 100, PLAYER_2_IMAGE)
-        self._cover_1_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 300, 120, 60, CACTUS_IMAGE)
-        self._cover_1_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 350, 120, 60, CACTUS_IMAGE)
-        self._cover_1_3 = Cactus_Cover(WIDTH - 200, HEIGHT - 400, 120, 60, CACTUS_IMAGE)
-        self._cover_2_1 = Cactus_Cover(WIDTH - 900, HEIGHT - 550, 120, 60, CACTUS_IMAGE)
-        self._cover_2_2 = Cactus_Cover(WIDTH - 600, HEIGHT - 600, 120, 60, CACTUS_IMAGE)
-        self._cover_2_3 = Cactus_Cover(WIDTH - 200, HEIGHT - 650, 120, 60, CACTUS_IMAGE)
-        self._Bullet_Ctrl = Bullet_Controller(self._P1, self._P2, self._cover_1_1, self._cover_1_2, self._cover_1_3, self._cover_2_1, self._cover_2_2, self._cover_2_3)
-        self._cactus_damage_ctrl = Cactus_Damage_Control(self._cover_1_1, self._cover_1_2, self._cover_1_3, self._cover_2_1, self._cover_2_2, self._cover_2_3, self._P1, self._P2)
-        self._Draw_Ctrl = Draw_Controller(self._cover_1_1, self._cover_1_2, self._cover_1_3, self._cover_2_1, self._cover_2_2, self._cover_2_3, self._P1, self._P2, self._Bullet_Ctrl)
-
-    
-
+        self._covers = [
+            Cactus_Cover(WIDTH - 900, HEIGHT - 300, 120, 60, CACTUS_IMAGE),
+            Cactus_Cover(WIDTH - 600, HEIGHT - 350, 120, 60, CACTUS_IMAGE),
+            Cactus_Cover(WIDTH - 200, HEIGHT - 400, 120, 60, CACTUS_IMAGE),
+            Cactus_Cover(WIDTH - 900, HEIGHT - 550, 120, 60, CACTUS_IMAGE),
+            Cactus_Cover(WIDTH - 600, HEIGHT - 600, 120, 60, CACTUS_IMAGE),
+            Cactus_Cover(WIDTH - 200, HEIGHT - 650, 120, 60, CACTUS_IMAGE)
+        ]
+        self._Bullet_Ctrl = Bullet_Controller(self._P1, self._P2, self._covers)
+        self._cactus_damage_ctrl = Cactus_Damage_Control(self._covers, self._P1, self._P2)
+        self._Draw_Ctrl = Draw_Controller(self._covers, self._P1, self._P2, self._Bullet_Ctrl)
 
     def game(self):
         timer = 0
@@ -40,36 +39,20 @@ class Game_Controller:
             clock.tick(60)
             timer += clock.get_time()
 
-            
             self._P1.handle_movement()
             self._P2.handle_movement()
 
-            if self._cover_1_1.get_health() <= 0:
-                self._cover_1_1.remove()
-
-            if self._cover_1_2.get_health() <= 0:
-                self._cover_1_2.remove()
-
-            if self._cover_1_3.get_health() <= 0:
-                self._cover_1_3.remove()
-
-            if self._cover_2_1.get_health() <= 0:
-                self._cover_2_1.remove()
-
-            if self._cover_2_2.get_health() <= 0:
-                self._cover_2_2.remove()
-
-            if self._cover_2_3.get_health() <= 0:
-                self._cover_2_3.remove()
+            for cover in self._covers:
+                if cover.get_health() <= 0:
+                    cover.remove()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
                     pygame.quit()
 
-                self._P1.shoot(event)  
-                self._P2.shoot(event)          
-                self._cactus_damage_ctrl.take_damage_on_colision(event)
+                self._P1.shoot(event)
+                self._P2.shoot(event)
                 self._Bullet_Ctrl.hit(event)
 
             winner_text = ""
@@ -87,9 +70,9 @@ class Game_Controller:
                 sound.play()
                 self._Draw_Ctrl.draw_winner(winner_text)
                 pygame.quit()
-        
-            self._cactus_damage_ctrl.handle_cactus_colissions()
+
+            self._cactus_damage_ctrl.handle_cactus_collisions()
             self._Bullet_Ctrl.handle_bullets()
             self._P1.handle_movement()
             self._P2.handle_movement()
-            self._Draw_Ctrl.draw_window(timer) 
+            self._Draw_Ctrl.draw_window(timer)

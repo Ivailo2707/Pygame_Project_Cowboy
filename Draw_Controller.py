@@ -9,14 +9,9 @@ pygame.display.set_caption("Cowboy shooter")
 
 
 class Draw_Controller:
-    def __init__(self, cover_1_1, cover_1_2, cover_1_3, cover_2_1, cover_2_2, cover_2_3, P1, P2, Bullet_Controller):
+    def __init__(self, covers, P1, P2, Bullet_Controller):
         self._DESERT = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Desert.png')), (WIDTH, HEIGHT))
-        self._cover_1_1 = cover_1_1
-        self._cover_1_2 = cover_1_2
-        self._cover_1_3 = cover_1_3
-        self._cover_2_1 = cover_2_1
-        self._cover_2_2 = cover_2_2
-        self._cover_2_3 = cover_2_3
+        self._covers = covers
         self._P1 = P1
         self._P2 = P2
         self._Bullet_Ctrl = Bullet_Controller
@@ -39,23 +34,9 @@ class Draw_Controller:
         self._P1.draw_health(WIN, self._P1.get_health())
         self._P2.draw_health(WIN, self._P2.get_health())
 
-        if self._cover_1_1.get_status():
-            self._cover_1_1.draw(WIN)
-
-        if self._cover_1_2.get_status():
-            self._cover_1_2.draw(WIN)
-
-        if self._cover_1_3.get_status():
-            self._cover_1_3.draw(WIN)
-
-        if self._cover_2_1.get_status():
-            self._cover_2_1.draw(WIN)
-
-        if self._cover_2_2.get_status():
-            self._cover_2_2.draw(WIN)
-
-        if self._cover_2_3.get_status():
-            self._cover_2_3.draw(WIN)
+        for cover in self._covers:
+            if cover.get_status():
+                cover.draw(WIN)
 
         self.draw_time(timer)
         self._P1.draw(WIN)

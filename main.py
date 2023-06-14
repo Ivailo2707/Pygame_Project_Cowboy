@@ -1,6 +1,6 @@
 from Game_Controller import Game_Controller
 
-#note cover obstacle and cactus are the same thing
+#note cover obstacle and cactus are the same things
 
 GaCtrl = Game_Controller()
 
